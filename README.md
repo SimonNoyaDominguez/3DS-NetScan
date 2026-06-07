@@ -54,6 +54,29 @@ En los menús de configuración:
 
 ---
 
+## Releases
+
+### v1.0 - Funcionalidad básica completa
+
+**Archivos incluidos:**
+- `scanner.3dsx` - Ejecutable principal
+- `scanner.elf` - Archivo intermedio (opcional)
+
+**Instalación:**
+1. Copia `scanner.3dsx` a la carpeta `/3ds/` de tu SD
+2. (Opcional) Crea la carpeta `/3ds/scanner/` y ponlo ahí
+3. Abre Homebrew Launcher y ejecuta
+
+**Primer uso:**
+- La IP base por defecto es `192.168.1.X`
+- Presiona `R` para cambiarla si tu red es diferente
+- Presiona `B` para buscar hosts activos
+- Presiona `A` para escaneo completo
+
+**Nota:** Los resultados se guardan en `sd:/3ds/scanner/resultados.txt`
+
+---
+
 ## Funciones
 
 ### Descubrimiento de hosts (`B`)
