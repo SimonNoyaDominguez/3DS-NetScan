@@ -4,6 +4,10 @@
 
 Un escáner de red que corre nativamente en una **Nintendo 3DS** con CFW. Escanea hosts, puertos y captura banners de servicios usando la WiFi de la consola. 
 
+> 🇬🇧 **English version available:**
+> An English version of this README is available in the `english` branch.
+> The `v1.0-en` release is also fully translated into English.
+
 ---
 
 ## ¿Qué hace?
