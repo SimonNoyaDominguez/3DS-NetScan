@@ -77,11 +77,11 @@ void actualizar_puertos_activos() {
 }
 
 // ============================================
-// GUARDAR RESULTADOS EN LA SD
+// SAVE RESULTS TO SD
 // ============================================
 
 void guardar_resultados(const char *ip, char *puertos_abiertos[], int num) {
-    // Crear directorio si no existe
+    // Create directory if it doesn't exist
     mkdir("/3ds", 0777);
     mkdir("/3ds/scanner", 0777);
     
@@ -102,7 +102,7 @@ void guardar_resultados(const char *ip, char *puertos_abiertos[], int num) {
 }
 
 // ============================================
-// HOST RESPONDE
+// HOST RESPONDS
 // ============================================
 
 #undef EINPROGRESS
@@ -175,7 +175,7 @@ int host_activo(const char *ip) {
 }
 
 // ============================================
-// PUERTO ABIERTO
+// PORT OPEN
 // ============================================
 
 int puerto_abierto(const char *ip, int puerto, int timeout_ms) {
@@ -315,7 +315,7 @@ const char* servicio(int puerto) {
 }
 
 // ============================================
-// GESTOR DE PUERTOS EXTRA
+// EXTRA PORTS MANAGER
 // ============================================
 
 void gestionar_puertos_extra() {
@@ -326,13 +326,13 @@ void gestionar_puertos_extra() {
         if (primera_vez) { printf("\x1b[2J"); primera_vez = 0; }
         printf("\x1b[1;1H");
         printf("==========================================\n");
-        printf("     PUERTOS EXTRA (SELECT para marcar)\n");
+        printf("     EXTRA PORTS (SELECT to toggle)\n");
         printf("==========================================\n");
-        printf("Puertos base activos: %d\n", num_base);
+        printf("Active base ports: %d\n", num_base);
         int extra_count = 0;
         for (int i = 0; i < num_extra; i++) if (puertos_extra[i].activo) extra_count++;
-        printf("Puertos extra activos: %d\n", extra_count);
-        printf("Total puertos a escanear: %d\n\n", num_base + extra_count);
+        printf("Active extra ports: %d\n", extra_count);
+        printf("Total ports to scan: %d\n\n", num_base + extra_count);
         
         if (seleccion >= y_offset + max_visible) y_offset = seleccion - max_visible + 1;
         if (seleccion < y_offset) y_offset = seleccion;
@@ -346,7 +346,7 @@ void gestionar_puertos_extra() {
                 printf(puertos_extra[i].activo ? "   [X] %d - %s\n" : "   [ ] %d - %s\n", puertos_extra[i].puerto, puertos_extra[i].nombre);
             }
         }
-        printf("\nCONTROLES: UP/DOWN - Mover | A - Marcar | X - Todos | Y - Limpiar | B - Volver\n");
+        printf("\nCONTROLS: UP/DOWN - Move | A - Toggle | X - All | Y - Clear | B - Back\n");
         
         gfxFlushBuffers(); gfxSwapBuffers();
         hidScanInput();
@@ -364,7 +364,7 @@ void gestionar_puertos_extra() {
 }
 
 // ============================================
-// CONFIGURAR IP BASE
+// CONFIGURE BASE IP
 // ============================================
 
 void actualizar_ip_base() { snprintf(NETWORK_BASE, sizeof(NETWORK_BASE), "%d.%d.%d.", octetos[0], octetos[1], octetos[2]); }
@@ -375,14 +375,14 @@ void configurar_ip_base() {
     while (configurando) {
         printf("\x1b[1;1H");
         printf("==========================================\n");
-        printf("     CONFIGURAR IP BASE\n");
+        printf("     CONFIGURE BASE IP\n");
         printf("==========================================\n\n");
-        printf("IP actual: %d.%d.%d.X\n", octetos[0], octetos[1], octetos[2]);
+        printf("Current IP: %d.%d.%d.X\n", octetos[0], octetos[1], octetos[2]);
         printf("\n");
         printf(seleccion == 0 ? ">> [%d] . %d . %d . X\n" : "   [%d] . %d . %d . X\n", octetos[0], octetos[1], octetos[2]);
         printf(seleccion == 1 ? ">>  %d . [%d] . %d . X\n" : "   %d . %d . %d . X\n", octetos[0], octetos[1], octetos[2]);
         printf(seleccion == 2 ? ">>  %d . %d . [%d] . X\n" : "   %d . %d . %d . X\n", octetos[0], octetos[1], octetos[2]);
-        printf("\nCONTROLES: UP/DOWN | LEFT/RIGHT | A-Guardar | B-Cancelar\n");
+        printf("\nCONTROLS: UP/DOWN | LEFT/RIGHT | A-Save | B-Cancel\n");
         
         gfxFlushBuffers(); gfxSwapBuffers();
         hidScanInput();
@@ -401,7 +401,7 @@ void configurar_ip_base() {
 }
 
 // ============================================
-// CONFIGURAR RANGO
+// CONFIGURE IP RANGE
 // ============================================
 
 void configurar_rango() {
@@ -425,11 +425,11 @@ void configurar_rango() {
 
         printf("\x1b[1;1H");
         printf("==========================================\n");
-        printf("     CONFIGURAR RANGO DE IPS\n");
+        printf("     CONFIGURE IP RANGE\n");
         printf("==========================================\n\n");
-        printf("IP base: %s\n\n", NETWORK_BASE);
+        printf("Base IP: %s\n\n", NETWORK_BASE);
 
-        printf("--- INICIO ---\n");
+        printf("--- START ---\n");
         for (int i = 0; i < num_opciones; i++) {
             if (seleccion == 0 && i == idx_inicio)
                 printf(">> %s%d\n", NETWORK_BASE, inicios[i]);
@@ -437,7 +437,7 @@ void configurar_rango() {
                 printf("   %s%d\n", NETWORK_BASE, inicios[i]);
         }
 
-        printf("\n--- FIN ---\n");
+        printf("\n--- END ---\n");
         for (int i = 0; i < num_opciones; i++) {
             if (seleccion == 1 && i == idx_fin)
                 printf(">> %s%d\n", NETWORK_BASE, fines[i]);
@@ -445,10 +445,10 @@ void configurar_rango() {
                 printf("   %s%d\n", NETWORK_BASE, fines[i]);
         }
 
-        printf("\nRango actual: %s%d - %s%d\n", 
+        printf("\nCurrent range: %s%d - %s%d\n", 
                NETWORK_BASE, inicios[idx_inicio],
                NETWORK_BASE, fines[idx_fin]);
-        printf("LEFT/RIGHT inicio/fin | UP/DOWN elegir | A guardar | B cancelar\n");
+        printf("LEFT/RIGHT start/end | UP/DOWN choose | A save | B cancel\n");
 
         gfxFlushBuffers(); gfxSwapBuffers();
         hidScanInput();
@@ -488,7 +488,7 @@ void configurar_rango() {
 }
 
 // ============================================
-// OBTENER IP DE LA 3DS
+// GET 3DS IP ADDRESS
 // ============================================
 
 void obtener_mi_ip() {
@@ -502,7 +502,7 @@ void obtener_mi_ip() {
 }
 
 // ============================================
-// DIBUJAR MENU
+// DRAW MENU
 // ============================================
 
 void dibujar_menu() {
@@ -513,24 +513,24 @@ void dibujar_menu() {
     printf("==========================================\n");
     printf("      3DS NETWORK SCANNER\n");
     printf("==========================================\n\n");
-    printf("Mi IP: %s\n", mi_ip);
-    printf("Red: %s%d-%d\n", NETWORK_BASE, rango_inicio, rango_fin);
-    printf("Puertos base: %d\n", num_base);
-    printf("Puertos extra: %d activos\n", extra_count);
-    printf("Total escaneo: %d puertos\n\n", num_base + extra_count);
-    printf("  A - Escaneo COMPLETO\n");
-    printf("  B - Solo buscar HOSTS\n");
-    printf("  Y - Escanear IP (SIN banner)\n");
-    printf("  X - Escanear IP (CON banner)\n");
-    printf("  R - CONFIGURAR IP BASE\n");
-    printf("  L - CONFIGURAR RANGO\n");
-    printf("  SELECT - PUERTOS EXTRA\n");
-    printf("  START - CANCELAR / Salir\n");
-    printf("\nResultados guardados en /3ds/scanner/resultados.txt\n");
+    printf("My IP: %s\n", mi_ip);
+    printf("Network: %s%d-%d\n", NETWORK_BASE, rango_inicio, rango_fin);
+    printf("Base ports: %d\n", num_base);
+    printf("Extra ports: %d active\n", extra_count);
+    printf("Total scan: %d ports\n\n", num_base + extra_count);
+    printf("  A - FULL SCAN (Hosts + Ports)\n");
+    printf("  B - Scan HOSTS only\n");
+    printf("  Y - Scan IP (WITHOUT banner)\n");
+    printf("  X - Scan IP (WITH banner)\n");
+    printf("  R - CONFIGURE BASE IP\n");
+    printf("  L - CONFIGURE IP RANGE\n");
+    printf("  SELECT - EXTRA PORTS\n");
+    printf("  START - CANCEL / Exit\n");
+    printf("\nResults saved to /3ds/scanner/resultados.txt\n");
 }
 
 // ============================================
-// ESCANEAR RED
+// SCAN NETWORK
 // ============================================
 
 void escanear_red() {
@@ -539,11 +539,11 @@ void escanear_red() {
     
     printf("\x1b[2J\x1b[1;1H");
     printf("==========================================\n");
-    printf("     BUSCANDO HOSTS EN %s%d-%d\n", NETWORK_BASE, rango_inicio, rango_fin);
+    printf("     SEARCHING FOR HOSTS IN %s%d-%d\n", NETWORK_BASE, rango_inicio, rango_fin);
     printf("==========================================\n");
-    printf("Puertos sonda: 22,80,443,8443,1883\n");
+    printf("Probe ports: 22,80,443,8443,1883\n");
     printf("Timeout: 300ms (1883: 150ms)\n");
-    printf("Presiona START para CANCELAR\n\n");
+    printf("Press START to CANCEL\n\n");
     
     for (int i = rango_inicio; i <= rango_fin && escaneando; i++) {
         char ip[20];
@@ -552,7 +552,7 @@ void escanear_red() {
         printf("\x1b[5;1H\x1b[K");
         printf("IP: %s (%d-%d)", ip, i, rango_fin);
         printf("\x1b[6;1H\x1b[K");
-        printf("Hosts encontrados: %d", total_hosts);
+        printf("Hosts found: %d", total_hosts);
         gfxFlushBuffers(); gfxSwapBuffers();
         
         if (host_activo(ip)) {
@@ -567,7 +567,7 @@ void escanear_red() {
         if (hidKeysDown() & KEY_START) {
             escaneando = 0;
             printf("\x1b[24;1H\x1b[K");
-            printf("ESCANEO CANCELADO");
+            printf("SCAN CANCELLED");
             gfxFlushBuffers(); gfxSwapBuffers();
             break;
         }
@@ -576,13 +576,13 @@ void escanear_red() {
     
     if (escaneando) {
         printf("\x1b[24;1H\x1b[K");
-        printf("Completado. %d hosts activos", total_hosts);
+        printf("Completed. %d active hosts", total_hosts);
         gfxFlushBuffers(); gfxSwapBuffers();
     }
 }
 
 // ============================================
-// ESCANEAR PUERTOS SIN BANNER
+// SCAN PORTS WITHOUT BANNER
 // ============================================
 
 void escanear_puertos_sin_banner(const char *ip) {
@@ -591,10 +591,10 @@ void escanear_puertos_sin_banner(const char *ip) {
     
     printf("\x1b[2J\x1b[1;1H");
     printf("==========================================\n");
-    printf("     ESCANEANDO %s\n", ip);
+    printf("     SCANNING %s\n", ip);
     printf("==========================================\n");
-    printf("Puertos a escanear: %d\n", num_puertos_activos);
-    printf("Presiona START para CANCELAR\n\n");
+    printf("Ports to scan: %d\n", num_puertos_activos);
+    printf("Press START to CANCEL\n\n");
     
     int encontrados = 0;
     char *resultados[MAX_RESULTADOS];
@@ -607,13 +607,13 @@ void escanear_puertos_sin_banner(const char *ip) {
     
     for (int i = 0; i < num_puertos_activos && escaneando; i++) {
         printf("\x1b[5;1H\x1b[K");
-        printf("Puerto %d... (%d/%d)", puertos_activos[i], i+1, num_puertos_activos);
+        printf("Port %d... (%d/%d)", puertos_activos[i], i+1, num_puertos_activos);
         gfxFlushBuffers(); gfxSwapBuffers();
         
         if (puerto_abierto(ip, puertos_activos[i], TIMEOUT_PUERTO)) {
             encontrados++;
             char buffer[256];
-            snprintf(buffer, sizeof(buffer), "[ABIERTO] %d - %s", puertos_activos[i], servicio(puertos_activos[i]));
+            snprintf(buffer, sizeof(buffer), "[OPEN] %d - %s", puertos_activos[i], servicio(puertos_activos[i]));
             strcpy(resultados[num_resultados++], buffer);
             printf("\x1b[%d;1H\x1b[K", 7 + encontrados);
             printf("%s", buffer);
@@ -627,17 +627,17 @@ void escanear_puertos_sin_banner(const char *ip) {
     
     if (escaneando && encontrados == 0) {
         printf("\x1b[7;1H\x1b[K");
-        printf("No hay puertos abiertos");
+        printf("No open ports found");
     }
     
-    // Guardar resultados en SD
+    // Save results to SD
     if (encontrados > 0) {
         guardar_resultados(ip, resultados, num_resultados);
     }
     
     for (int i = 0; i < MAX_RESULTADOS; i++) free(resultados[i]);
     
-    printf("\n\n\x1b[24;1HPresiona B para volver...");
+    printf("\n\n\x1b[24;1HPress B to go back...");
     gfxFlushBuffers(); gfxSwapBuffers();
     while (1) {
         hidScanInput();
@@ -647,7 +647,7 @@ void escanear_puertos_sin_banner(const char *ip) {
 }
 
 // ============================================
-// ESCANEAR PUERTOS CON BANNER
+// SCAN PORTS WITH BANNER
 // ============================================
 
 void escanear_puertos_con_banner(const char *ip) {
@@ -656,11 +656,11 @@ void escanear_puertos_con_banner(const char *ip) {
 
     printf("\x1b[2J\x1b[1;1H");
     printf("==========================================\n");
-    printf("     ESCANEANDO %s\n", ip);
+    printf("     SCANNING %s\n", ip);
     printf("==========================================\n");
-    printf("Puertos: %d | Banner: ON\n", num_puertos_activos);
+    printf("Ports: %d | Banner: ON\n", num_puertos_activos);
     printf("------------------------------------------\n");
-    printf("Resultados:\n");
+    printf("Results:\n");
     
     int encontrados = 0;
     char banner[BANNER_MAX];
@@ -675,7 +675,7 @@ void escanear_puertos_con_banner(const char *ip) {
 
     for (int i = 0; i < num_puertos_activos && escaneando; i++) {
         printf("\x1b[5;1H\x1b[K");
-        printf("Progreso: %d/%d - Puerto %d", i+1, num_puertos_activos, puertos_activos[i]);
+        printf("Progress: %d/%d - Port %d", i+1, num_puertos_activos, puertos_activos[i]);
         gfxFlushBuffers(); gfxSwapBuffers();
 
         if (puerto_abierto(ip, puertos_activos[i], TIMEOUT_PUERTO)) {
@@ -720,11 +720,11 @@ void escanear_puertos_con_banner(const char *ip) {
 
     if (escaneando && encontrados == 0) {
         printf("\x1b[7;1H\x1b[K");
-        printf("No hay puertos abiertos");
+        printf("No open ports found");
         linea_actual++;
     }
     
-    // Guardar resultados en SD
+    // Save results to SD
     if (encontrados > 0) {
         guardar_resultados(ip, resultados, num_resultados);
     }
@@ -732,8 +732,8 @@ void escanear_puertos_con_banner(const char *ip) {
     for (int i = 0; i < MAX_RESULTADOS; i++) free(resultados[i]);
 
     printf("\x1b[5;1H\x1b[K");
-    printf("Completado. %d puertos abiertos.", encontrados);
-    printf("\x1b[%d;1HPresiona B para volver...", linea_actual + 2);
+    printf("Completed. %d open ports found.", encontrados);
+    printf("\x1b[%d;1HPress B to go back...", linea_actual + 2);
     gfxFlushBuffers(); gfxSwapBuffers();
     
     while (1) {
@@ -744,17 +744,17 @@ void escanear_puertos_con_banner(const char *ip) {
 }
 
 // ============================================
-// SELECCIONAR IP
+// SELECT IP
 // ============================================
 
 void seleccionar_ip(int con_banner) {
     printf("\x1b[2J\x1b[1;1H");
     printf("==========================================\n");
-    printf(con_banner ? "     ESCANEAR IP (CON BANNER)\n" : "     ESCANEAR IP (SIN BANNER)\n");
+    printf(con_banner ? "     SCAN IP (WITH BANNER)\n" : "     SCAN IP (WITHOUT BANNER)\n");
     printf("==========================================\n\n");
-    printf("Usa UP/DOWN para cambiar el numero\n");
-    printf("X - Sumar 10 | Y - Restar 10\n");
-    printf("Presiona A para escanear, B para cancelar\n\n");
+    printf("Use UP/DOWN to change the number\n");
+    printf("X - Add 10 | Y - Subtract 10\n");
+    printf("Press A to scan, B to cancel\n\n");
     
     int num = 1;
     int seleccionando = 1;
@@ -785,12 +785,12 @@ void seleccionar_ip(int con_banner) {
 }
 
 // ============================================
-// ESCANEAR HOSTS ENCONTRADOS
+// SCAN FOUND HOSTS
 // ============================================
 
 void escanear_hosts_encontrados() {
     if (total_hosts == 0) {
-        printf("\nNo hay hosts. Primero haz 'B - Solo hosts'\nPresiona B...");
+        printf("\nNo hosts found. First do 'B - Scan HOSTS only'\nPress B...");
         gfxFlushBuffers(); gfxSwapBuffers();
         while (1) { hidScanInput(); if (hidKeysDown() & KEY_B) break; gspWaitForVBlank(); }
         return;
@@ -798,7 +798,7 @@ void escanear_hosts_encontrados() {
     
     for (int h = 0; h < total_hosts && escaneando; h++) {
         printf("\n\x1b[23;1H\x1b[K");
-        printf("Escaneando %d/%d - START saltar", h+1, total_hosts);
+        printf("Scanning %d/%d - START skip", h+1, total_hosts);
         gfxFlushBuffers(); gfxSwapBuffers();
         escanear_puertos_sin_banner(hosts_activos[h]);
         if (!escaneando) break;
@@ -811,13 +811,13 @@ void escanear_hosts_encontrados() {
 }
 
 // ============================================
-// OPCIONES DEL MENU
+// MENU OPTIONS
 // ============================================
 
 void completo() {
     escanear_red();
     if (total_hosts == 0) {
-        printf("\n\nNo hay hosts. Presiona B...");
+        printf("\n\nNo hosts found. Press B...");
         gfxFlushBuffers(); gfxSwapBuffers();
         while (1) { hidScanInput(); if (hidKeysDown() & KEY_B) break; gspWaitForVBlank(); }
         return;
@@ -827,7 +827,7 @@ void completo() {
     if (escaneando) {
         printf("\x1b[2J\x1b[1;1H");
         printf("==========================================\n");
-        printf("           RESUMEN FINAL\n");
+        printf("           FINAL SUMMARY\n");
         printf("==========================================\n\n");
         for (int h = 0; h < total_hosts; h++) {
             printf("%s:\n", hosts_activos[h]);
@@ -839,7 +839,7 @@ void completo() {
             printf("\n");
             gfxFlushBuffers(); gfxSwapBuffers();
         }
-        printf("Presiona B para volver...");
+        printf("Press B to go back...");
         gfxFlushBuffers(); gfxSwapBuffers();
         while (1) { hidScanInput(); if (hidKeysDown() & KEY_B) break; gspWaitForVBlank(); }
     }
@@ -847,7 +847,7 @@ void completo() {
 
 void solo_hosts() {
     escanear_red();
-    printf("\n\nPresiona B para volver...");
+    printf("\n\nPress B to go back...");
     gfxFlushBuffers(); gfxSwapBuffers();
     while (1) { hidScanInput(); if (hidKeysDown() & KEY_B) break; gspWaitForVBlank(); }
 }
@@ -862,7 +862,7 @@ int main() {
     
     u32 *soc_buffer = (u32*)memalign(0x1000, 0x100000);
     if (!soc_buffer) {
-        printf("Error de memoria SOC\n");
+        printf("SOC memory error\n");
         gfxExit();
         return -1;
     }
